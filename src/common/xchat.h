@@ -1,6 +1,7 @@
 #include "../../config.h"
 
 #include <glib.h>
+#include <gio/gio.h>
 #include <time.h>			/* need time_t */
 
 #ifndef XCHAT_H

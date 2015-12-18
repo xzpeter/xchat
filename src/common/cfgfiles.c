@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* X-Chat
  * Copyright (C) 1998 Peter Zelezny.
  *
@@ -34,7 +35,8 @@
 #ifdef WIN32
 #define XCHAT_DIR "X-Chat 2"
 #else
-#define XCHAT_DIR ".xchat2"
+#define XCHAT_DIR "xchat2"
+#define OLD_XCHAT_DIR ".xchat2"
 #endif
 #define DEF_FONT "Monospace 9"
 
@@ -318,15 +320,66 @@ get_xdir_fs (void)
 	return xdir_fs;
 }
 
+void
+maybe_migrate_xdg_config (void)
+{
+}
+
 #else
 
 char *
 get_xdir_fs (void)
 {
 	if (!xdir_fs)
-		xdir_fs = g_strdup_printf ("%s/" XCHAT_DIR, g_get_home_dir ());
+		xdir_fs = g_strdup_printf ("%s/" XCHAT_DIR, g_get_user_config_dir ());
 
 	return xdir_fs;
+}
+
+void
+maybe_migrate_xdg_config (void)
+{
+	char *old_dir;
+	char *new_dir;
+	GFile *source;
+	GFile *dest;
+	GError *error;
+	gboolean res;
+
+	new_dir = g_strdup_printf ("%s/" XCHAT_DIR, g_get_user_config_dir ());
+
+	/* already migrated */
+	if (g_file_test (new_dir, G_FILE_TEST_IS_DIR))
+		{
+			g_free (new_dir);
+			return;
+		}
+
+	/* nothing to migrate */
+	old_dir = g_strdup_printf ("%s/" OLD_XCHAT_DIR, g_get_home_dir ());
+	if (!g_file_test (old_dir, G_FILE_TEST_IS_DIR))
+	{
+		g_free (old_dir);
+		g_free (new_dir);
+		return;
+	}
+
+	source = g_file_new_for_path (old_dir);
+	dest = g_file_new_for_path (new_dir);
+
+	g_message (_("Migrating data from %s to %s"), old_dir, new_dir);
+	error = NULL;
+	res = g_file_move (source, dest, G_FILE_COPY_NONE, NULL, NULL, NULL, &error);
+	if (error != NULL)
+	{
+		g_warning (_("Error migrating data: %s"), error->message);
+		g_error_free (error);
+	}
+
+	g_free (old_dir);
+	g_free (new_dir);
+	g_object_unref (source);
+	g_object_unref (dest);
 }
 
 #endif	/* !WIN32 */
@@ -351,7 +404,7 @@ check_prefs_dir (void)
 #else
 		if (mkdir (dir, S_IRUSR | S_IWUSR | S_IXUSR) != 0)
 #endif
-			fe_message (_("Cannot create ~/.xchat2"), FE_MSG_ERROR);
+			fe_message (_("Cannot create configuration directory"), FE_MSG_ERROR);
 	}
 }
 
@@ -593,6 +646,7 @@ load_config (void)
 	const char *username, *realname;
 	int res, val, i, fh;
 
+	maybe_migrate_xdg_config ();
 	check_prefs_dir ();
 	username = g_get_user_name ();
 	if (!username)
