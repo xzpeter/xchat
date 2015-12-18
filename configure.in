@@ -792,6 +792,7 @@ plugins/python/Makefile
 plugins/perl/Makefile
 plugins/tcl/Makefile
 intl/Makefile
+icons/Makefile
 po/Makefile.in
 ])
 
