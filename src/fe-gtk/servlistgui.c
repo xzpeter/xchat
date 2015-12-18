@@ -267,7 +267,7 @@ servlist_addnet_cb (GtkWidget *item, GtkTreeView *treeview)
 	ircnet *net;
 
 	net = servlist_net_add (_("New Network"), "", TRUE);
-	net->encoding = strdup ("IRC (Latin/Unicode Hybrid)");
+	net->encoding = strdup ("UTF-8 (Unicode)");
 	servlist_server_add (net, "newserver/6667");
 
 	store = (GtkListStore *)gtk_tree_view_get_model (treeview);
