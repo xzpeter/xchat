@@ -522,14 +522,11 @@ get_cpu_info (double *mhz, int *cpus)
 	int fh;
 
 	*mhz = 0;
-	*cpus = 0;
+	*cpus = (int) sysconf(_SC_NPROCESSORS_ONLN);
 
 	fh = open ("/proc/cpuinfo", O_RDONLY);	/* linux 2.2+ only */
 	if (fh == -1)
-	{
-		*cpus = 1;
 		return;
-	}
 
 	while (1)
 	{
@@ -544,15 +541,9 @@ get_cpu_info (double *mhz, int *cpus)
 		} else if (!strncmp (buf, "clock\t\t:", 8))	/* PPC */
 		{
 			*mhz = atoi (buf + 9);
-		} else if (!strncmp (buf, "processor\t", 10))
-		{
-			(*cpus)++;
 		}
 	}
 	close (fh);
-	if (!*cpus)
-		*cpus = 1;
-
 #endif
 #ifdef USING_FREEBSD
 
