@@ -1,7 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=XChat IRC
+Name=XChat
 Name[zh_TW]=網路清談
+GenericName=IRC Client
 Comment[de]=IRC-Client
 Comment[es]=Aplicación de IRC
 Comment[fi]=IRC-sovellus
