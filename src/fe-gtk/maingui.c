@@ -3109,7 +3109,7 @@ mg_tabwindow_de_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
 		list = list->next;
 	}
 
-	mg_open_quit_dialog (TRUE);
+	mg_open_quit_dialog (FALSE);
 	return TRUE;
 }
 

@@ -670,11 +670,13 @@ load_config (void)
 	prefs.autoopendccchatwindow = 1;
 	prefs.userhost = 1;
 	prefs.gui_url_mod = 4;	/* ctrl */
-	prefs.gui_tray = 1;
+	prefs.gui_tray = 0;
 	prefs.gui_pane_left_size = 100;
 	prefs.gui_pane_right_size = 100;
 	prefs.mainwindow_save = 1;
 	prefs.bantype = 2;
+	prefs.input_balloon_hilight = 1;
+	prefs.input_balloon_priv = 1;
 	prefs.input_balloon_time = 20;
 	prefs.input_flash_priv = prefs.input_flash_hilight = 1;
 	prefs.input_tray_priv = prefs.input_tray_hilight = 1;
