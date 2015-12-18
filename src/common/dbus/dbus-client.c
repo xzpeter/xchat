@@ -53,11 +53,6 @@ xchat_remote (void)
 	GError *error = NULL;
 	char *command = NULL;
 
-	/* GnomeVFS >=2.15 uses D-Bus and threads, so threads should be
-	 * initialised before opening for the first time a D-Bus connection */
-	if (!g_thread_supported ()) {
-		g_thread_init (NULL);
-	}
 	dbus_g_thread_init ();
 
 	/* if there is nothing to do, return now. */
